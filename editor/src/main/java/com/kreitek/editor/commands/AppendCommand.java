@@ -13,6 +13,9 @@ public class AppendCommand implements Command {
 
     @Override
     public void execute(ArrayList<String> documentLines) {
+
         documentLines.add(text);
     }
+
+
 }

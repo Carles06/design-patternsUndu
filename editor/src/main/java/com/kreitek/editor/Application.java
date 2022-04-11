@@ -6,6 +6,7 @@ public class Application {
         EditorFactory editorFactory = new EditorFactory();
         Editor editor = editorFactory.getEditor();
         editor.run();
+
     }
 
 }

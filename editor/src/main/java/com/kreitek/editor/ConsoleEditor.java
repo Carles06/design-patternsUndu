@@ -3,6 +3,7 @@ package com.kreitek.editor;
 import com.kreitek.editor.commands.CommandFactory;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleEditor implements Editor {
@@ -16,8 +17,19 @@ public class ConsoleEditor implements Editor {
     public static final String TEXT_CYAN = "\u001B[36m";
     public static final String TEXT_WHITE = "\u001B[37m";
 
+    private String state;
+    Caretaker careTaker = new Caretaker();
     private final CommandFactory commandFactory = new CommandFactory();
     private ArrayList<String> documentLines = new ArrayList<String>();
+    List<Memento> mementoList = new ArrayList<Memento>();
+
+
+    public void setState(String state){
+
+        this.state = state;
+    }
+
+
 
     @Override
     public void run() {
@@ -27,6 +39,7 @@ public class ConsoleEditor implements Editor {
             try {
                 Command command = commandFactory.getCommand(commandLine);
                 command.execute(documentLines);
+                careTaker.add(getState());
             } catch (BadCommandException e) {
                 printErrorToConsole("Bad command");
             } catch (ExitException e) {
@@ -83,5 +96,15 @@ public class ConsoleEditor implements Editor {
     private void printToConsole(String message) {
         System.out.print(message);
     }
+
+    public Memento getState(){
+        List<String> state = new ArrayList<>(documentLines);
+        return new Memento(state);
+    }
+    public List<String> anyadirM(Memento memento){
+        state = String.valueOf(memento.getUndo());
+        return new ArrayList<>();
+    }
+
 
 }
